@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Function to print underlined text
+# print underlined text
 underline() {
   echo -e "\e[33m\e[4m$1\e[0m"
 }
