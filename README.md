@@ -33,7 +33,4 @@ To install PortWhisper, follow these steps:
 
    Targets must be a domain names without https/http
 
-4. Sample :
 
-![GitHub Logo](https://github.com/beardenx/LiteRadar/blob/main/Image/Output%201.png)
-![GitHub Logo](https://github.com/beardenx/LiteRadar/blob/main/Image/Output%202.png)
