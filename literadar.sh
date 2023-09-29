@@ -21,7 +21,7 @@ command_exists() {
 
 # Function to check and install dependencies
 install_dependencies() {
-    local dependencies=("wafw00f" "nmap" "openssl")
+    local dependencies=("wafw00f" "nmap" "openssl" "whatweb")
     for dep in "${dependencies[@]}"; do
         if ! command_exists "$dep"; then
             echo "[+] Installing $dep..."
