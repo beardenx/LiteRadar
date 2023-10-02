@@ -61,7 +61,7 @@ install_dependencies() {
     done
 
     if [ ${#installed_deps[@]} -gt 0 ]; then
-        echo "[+] Installed Dependencies: ${installed_deps[@]}"
+        echo "[+] Installing Missing Dependencies..."
     fi
     
     sleep 2 # Add a 3-second delay
