@@ -109,8 +109,14 @@ check_tls_versions_with_nmap() {
 check_tls_expiry_with_openssl() {
     local ssl_cert_info
     ssl_cert_info=$(openssl s_client -showcerts -servername "$1" -connect "$1:443" </dev/null 2>/dev/null | grep -oP 'NotAfter: \K[^;]*' | head -n 1)
-    echo "[+] Expiry Dates:  $ssl_cert_info"
+
+    if [ -n "$ssl_cert_info" ]; then
+        echo "[+] Expiry Dates: $ssl_cert_info"
+    else
+        echo -e "[+] Expiry Dates: \e[31mNo Expiry Date. SSL Certificates may not be supported.\e[0m"
+    fi
 }
+
 
 # Function to retrieve the target's IP addresses
 get_ip_addresses() {
@@ -204,21 +210,22 @@ extract_and_confirm_base_domain() {
 
     local base_domain=$(extract_base_domain "$domain")
 
-    read -p "[+] Base Domain: $base_domain, is this correct? (Y/N): " user_input
+    read -p $'\e[32m[+] Generating the Base Domain: \e[0m'"$base_domain, is this correct? (Y/N): " user_input
 
     if [[ "$user_input" == "N" || "$user_input" == "n" ]]; then
-        read -p "Please enter the correct base domain: " corrected_base
+        read -p $'\e[32mPlease enter the correct base domain:\e[0m' corrected_base
         base_domain="$corrected_base"
     fi
 
-    echo "[+] Enumerating subdomains for $base_domain (please wait)"
+    echo "[+] Enumerating subdomains for $base_domain"
 
     # Perform subdomain enumeration using Amass directly here
     local subdomains
     subdomains=$(assetfinder "$base_domain" 2>/dev/null | sort -u)
 
     if [[ -n "$subdomains" ]]; then
-        echo "[+] Subdomains:"
+        echo "[+] Subdomains: for $base_domain"
+        echo
         echo "$subdomains"
     else
         echo "[+] No subdomains found."
@@ -252,7 +259,7 @@ extract_web_info() {
     for ((i = 0; i < ${#patterns[@]}; i++)); do
         info=$(echo "$whatweb_output" | awk -F "${patterns[i]}" 'NF>1{print $2}' | awk -F ']' '{print $1}' | head -n 1)
         if [ -z "$info" ]; then
-            info="No Info"
+            info=$'\e[31mNo Info\e[0m'
         fi
         echo "[+] ${labels[i]}: $info"
     done
