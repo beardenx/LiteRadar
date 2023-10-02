@@ -318,9 +318,6 @@ main() {
     underline "URLs Found in Source Code for $1"
     extract_url_in_view_source "$whatweb_target"
 
-    underline "URLs Found in Source Code for $1"
-    extract_url_in_view_source "$whatweb_target"
-
     echo 
     underline "Subdomain Enumeration for $1"
     extract_and_confirm_base_domain "$@" 
