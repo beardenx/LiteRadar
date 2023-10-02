@@ -34,9 +34,8 @@ command_exists() {
 
 # Function to check and install dependencies
 install_dependencies() {
-    local dependencies=("wafw00f" "nmap" "openssl" "whatweb" "assetfinder")
-    local installed_deps=()
-    echo
+    local dependencies=("wafw00f" "nmap" "openssl" "whatweb")
+
     echo "[+] Checking Dependencies ..."
 
     for dep in "${dependencies[@]}"; do
@@ -45,9 +44,6 @@ install_dependencies() {
                 "wafw00f")
                     pip install wafw00f >/dev/null 2>&1
                     ;;
-                "assetfinder")
-                    go get -u github.com/tomnomnom/assetfinder >/dev/null 2>&1
-                    ;;
                 *)
                     sudo apt-get install -y "$dep" >/dev/null 2>&1
                     ;;
@@ -55,17 +51,41 @@ install_dependencies() {
 
             # Check if the installation was successful
             if [ $? -eq 0 ]; then
-                installed_deps+=("$dep")
+                echo "[+] Installed Dependency: $dep"
             fi
         fi
     done
 
-    if [ ${#installed_deps[@]} -gt 0 ]; then
-        echo "[+] Installing Missing Dependencies..."
+    if ! command_exists "go"; then
+        echo "[-] 'go' is not installed. Please install 'go' to build and install assetfinder manually."
+    else
+        echo "[+] 'go' is installed."
+        echo "[+] Installing assetfinder..."
+
+        # Clone the assetfinder repository
+        git clone https://github.com/tomnomnom/assetfinder.git
+        cd assetfinder
+
+        # Initialize a Go module
+        go mod init assetfinder
+
+        # Build assetfinder
+        go build .
+
+        # Move assetfinder to /usr/local/bin/
+        sudo mv assetfinder /usr/local/bin/
+
+        # Check if assetfinder is installed
+        if command_exists "assetfinder"; then
+            echo "[+] assetfinder is now installed."
+        else
+            echo "[-] Failed to install assetfinder. Please install it manually."
+        fi
+
+        cd ..
     fi
-    
-    sleep 2 # Add a 3-second delay
-    echo "[+] Checking Dependencies completed. All tools are installed."
+
+    echo "[+] Checking Dependencies completed. All tools are installed if needed."
 }
 
 # Function to check if a command exists
