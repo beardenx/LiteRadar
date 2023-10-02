@@ -68,7 +68,7 @@ install_dependencies() {
         cd ..
     fi
 
-    echo "[+] Checking Dependencies completed. All tools are installed if needed."
+    echo "[+] Checking Dependencies completed. All tools are installed."
 }
 
 # Function to check if a command exists
