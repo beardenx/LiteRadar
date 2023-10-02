@@ -35,24 +35,37 @@ command_exists() {
 # Function to check and install dependencies
 install_dependencies() {
     local dependencies=("wafw00f" "nmap" "openssl" "whatweb" "assetfinder")
-    
+    local installed_deps=()
+    echo
+    echo "[+] Checking Dependencies ..."
+
     for dep in "${dependencies[@]}"; do
         if ! command_exists "$dep"; then
-            echo "[+] Installing $dep..."
             case "$dep" in
                 "wafw00f")
-                    pip install wafw00f
+                    pip install wafw00f >/dev/null 2>&1
                     ;;
                 "assetfinder")
-                    echo "[+] Installing assetfinder..."
-                    go get -u github.com/tomnomnom/assetfinder
+                    go get -u github.com/tomnomnom/assetfinder >/dev/null 2>&1
                     ;;
                 *)
-                    sudo apt-get install -y "$dep"
+                    sudo apt-get install -y "$dep" >/dev/null 2>&1
                     ;;
             esac
+
+            # Check if the installation was successful
+            if [ $? -eq 0 ]; then
+                installed_deps+=("$dep")
+            fi
         fi
     done
+
+    if [ ${#installed_deps[@]} -gt 0 ]; then
+        echo "[+] Installed Dependencies: ${installed_deps[@]}"
+    fi
+    
+    sleep 2 # Add a 3-second delay
+    echo "[+] Checking Dependencies completed. All tools are installed."
 }
 
 # Function to check if a command exists
