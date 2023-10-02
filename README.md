@@ -14,7 +14,7 @@ LiteRadar is a Bash script that provides essential network information and web s
 9. Extract any URLs from the source code
 
 ## Dependencies (go)
-go is the only dependency
+go is the only dependency.
 If you do not have "go" installed and configured, please refer to https://go.dev/doc/install
 
 ## Getting Started:
