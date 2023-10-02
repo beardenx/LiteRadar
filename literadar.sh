@@ -5,6 +5,19 @@ underline() {
   echo -e "\e[33m\e[4m$1\e[0m"
 }
 
+# Function to determine the protocol (http or https) to use for whatweb
+determine_protocol() {
+    local domain="$1"
+    local protocol="http"
+
+    # Check if the domain supports HTTPS by attempting to fetch its SSL certificate
+    if curl --head --insecure --silent "https://$domain" | grep "200 OK" >/dev/null; then
+        protocol="https"
+    fi
+
+    echo "$protocol"
+}
+
 validate_domain() {
     local domain_pattern="^([a-zA-Z0-9.-]+)$"
     if [[ "$1" =~ $domain_pattern ]]; then
@@ -55,9 +68,9 @@ check_WAF_with_wafw00f() {
 
     if [[ "$wafw00f_output" == *"is behind"* ]]; then
         waf_info=$(grep -oP "is behind \K[^(]*" <<< "$wafw00f_output" | sed 's/\x1B\[[0-9;]*m//g')
-        echo "[+] WAF detected: $waf_info"
+        echo "[+] Web Application Firewall detected: $waf_info"
     else
-        echo "[+] WAF: Undetected"
+        echo "[+] Web Application Firewall: Undetected"
     fi
 }
 
@@ -276,8 +289,9 @@ main() {
         exit 1
     fi
 
-    # Add "https://" to the target for whatweb
-    whatweb_target="https://$1"
+    # Determine the protocol (http or https) to use for whatweb
+    protocol=$(determine_protocol "$domain_target")
+    whatweb_target="$protocol://$1"
 
     # Check and install dependencies if needed
     install_dependencies
