@@ -3,14 +3,15 @@ LiteRadar is a Bash script that provides essential network information and web s
 
 ## Key Features 🚀:
 
-1. Discover IP addresses and pinpoint geolocation.
-2. Identify open ports and associated services.
-3. WAF detection
-4. Detect TLS/SSL protocols and certificate expiry dates.
-5. Gather DNS OSINT data, including WHOIS information.
-6. Extract crucial HTTP response headers.
-7. Perform comprehensive Web Application OSINT.
-8. Extract any URLs from the source code
+1. Quick Subdomain Enumeration
+2. Discover IP addresses and pinpoint geolocation.
+3. Identify open ports and associated services.
+4. WAF detection
+5. Detect TLS/SSL protocols and certificate expiry dates.
+6. Gather DNS OSINT data, including WHOIS information.
+7. Extract crucial HTTP response headers.
+8. Perform comprehensive Web Application OSINT.
+9. Extract any URLs from the source code
 
 ## Getting Started:
 
