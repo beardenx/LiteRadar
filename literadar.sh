@@ -57,7 +57,7 @@ install_dependencies() {
     done
 
     if ! command_exists "go"; then
-        echo "[-] 'go' is not installed. Please install 'go' to build and install assetfinder manually."
+        echo "[-] 'go' is not installed. Please refer https://go.dev/dl/ to install go"
     else
         echo "[+] 'go' is installed."
         echo "[+] Installing assetfinder..."
