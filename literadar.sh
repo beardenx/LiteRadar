@@ -21,17 +21,30 @@ command_exists() {
 
 # Function to check and install dependencies
 install_dependencies() {
-    local dependencies=("wafw00f" "nmap" "openssl" "whatweb")
+    local dependencies=("wafw00f" "nmap" "openssl" "whatweb" "assetfinder")
+    
     for dep in "${dependencies[@]}"; do
         if ! command_exists "$dep"; then
             echo "[+] Installing $dep..."
-            if [ "$dep" == "wafw00f" ]; then
-                pip install wafw00f
-            else
-                sudo apt-get install -y "$dep"
-            fi
+            case "$dep" in
+                "wafw00f")
+                    pip install wafw00f
+                    ;;
+                "assetfinder")
+                    echo "[+] Installing assetfinder..."
+                    go get -u github.com/tomnomnom/assetfinder
+                    ;;
+                *)
+                    sudo apt-get install -y "$dep"
+                    ;;
+            esac
         fi
     done
+}
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
 }
 
 # Function to check WAF with wafw00f and display custom WAF info
@@ -189,7 +202,7 @@ extract_and_confirm_base_domain() {
 
     # Perform subdomain enumeration using Amass directly here
     local subdomains
-    subdomains=$(amass enum -d "$base_domain" 2>/dev/null | sort -u)
+    subdomains=$(assetfinder "$base_domain" 2>/dev/null | sort -u)
 
     if [[ -n "$subdomains" ]]; then
         echo "[+] Subdomains:"
@@ -305,12 +318,13 @@ main() {
     underline "URLs Found in Source Code for $1"
     extract_url_in_view_source "$whatweb_target"
 
+    underline "URLs Found in Source Code for $1"
+    extract_url_in_view_source "$whatweb_target"
 
-    #  # Subdomain Information
-    # echo 
-    # underline "Subdomain Enumeration for $1"
-    # extract_and_confirm_base_domain "$@" 
-    # echo
+    echo 
+    underline "Subdomain Enumeration for $1"
+    extract_and_confirm_base_domain "$@" 
+    echo
 }
 
 # Call the main function with command line argument
