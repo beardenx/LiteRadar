@@ -57,31 +57,14 @@ install_dependencies() {
     done
 
     if ! command_exists "go"; then
-        echo "[-] 'go' is not installed. Please refer https://go.dev/dl/ to install go"
+        echo "[-] 'go' is not installed. Please refer https://go.dev/dl/ to install 'go'"
     else
-        echo "[+] 'go' is installed."
-        echo "[+] Installing assetfinder..."
-
-        # Clone the assetfinder repository
-        git clone https://github.com/tomnomnom/assetfinder.git
+        # Silently install assetfinder
+        git clone https://github.com/tomnomnom/assetfinder.git >/dev/null 2>&1
         cd assetfinder
-
-        # Initialize a Go module
-        go mod init assetfinder
-
-        # Build assetfinder
-        go build .
-
-        # Move assetfinder to /usr/local/bin/
+        go mod init assetfinder >/dev/null 2>&1
+        go build . >/dev/null 2>&1
         sudo mv assetfinder /usr/local/bin/
-
-        # Check if assetfinder is installed
-        if command_exists "assetfinder"; then
-            echo "[+] assetfinder is now installed."
-        else
-            echo "[-] Failed to install assetfinder. Please install it manually."
-        fi
-
         cd ..
     fi
 
